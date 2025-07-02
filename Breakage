@@ -1,0 +1,47 @@
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let releasePos = null;
+let platePos = null;
+
+function drawFrame() {
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+}
+
+function markReleasePosition() {
+  drawFrame();
+  canvas.style.display = 'block';
+  canvas.onclick = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    releasePos = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+    canvas.style.display = 'none';
+    canvas.onclick = null;
+    checkMovementReady();
+  };
+}
+
+function markPlatePosition() {
+  drawFrame();
+  canvas.style.display = 'block';
+  canvas.onclick = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    platePos = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+    canvas.style.display = 'none';
+    canvas.onclick = null;
+    checkMovementReady();
+  };
+}
+
+function checkMovementReady() {
+  if (releasePos && platePos) {
+    const dx = platePos.x - releasePos.x;
+    const dy = platePos.y - releasePos.y;
+    const movementResult = document.getElementById('movementResult');
+    movementResult.innerHTML = `📍 Horizontal Movement: <strong>${dx.toFixed(1)}</strong> px<br>⬆ Vertical Movement: <strong>${dy.toFixed(1)}</strong> px`;
+  }
+}
